@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Products - Vishnu's Store{% endblock %}
+{% block content %}
+  <h1>Products</h1>
+  <form method="get" class="center" style="margin-bottom:1rem">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search products" />
+    <input type="submit" value="Search" />
+  </form>
+  <div class="grid">
+    {% for product in products %}
+    <a class="card" href="/catalog/{{ product.slug }}/">
+      <div class="thumb">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <div class="placeholder">No image</div>
+        {% endif %}
+      </div>
+      <div class="info">
+        <h3>{{ product.name }}</h3>
+        <p class="muted">{{ product.category.name }}</p>
+        <strong>₹{{ product.price }}</strong>
+      </div>
+    </a>
+    {% empty %}
+    <p>No products yet.</p>
+    {% endfor %}
+  </div>
+  {% if page_obj %}
+  <div class="center" style="margin-top:1rem">
+    {% if page_obj.has_previous %}
+      <a href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span style="margin:0 .5rem">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?q={{ q }}&page={{ page_obj.next_page_number }}">Next</a>
+    {% endif %}
+  </div>
+  {% endif %}
+{% endblock %}
+
+

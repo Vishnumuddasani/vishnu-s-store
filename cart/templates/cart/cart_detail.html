@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Your Cart - Vishnu's Store{% endblock %}
+{% block content %}
+  <h1>Your Cart</h1>
+  {% if items %}
+  <table style="width:100%;border-collapse:collapse;border:1px solid #e5e7eb;background:#fff;border-radius:10px;overflow:hidden">
+    <thead>
+      <tr style="background:#f9fafb">
+        <th style="text-align:left;padding:10px;border-bottom:1px solid #e5e7eb">Product</th>
+        <th style="text-align:left;padding:10px;border-bottom:1px solid #e5e7eb">Price</th>
+        <th style="text-align:left;padding:10px;border-bottom:1px solid #e5e7eb">Qty</th>
+        <th style="text-align:left;padding:10px;border-bottom:1px solid #e5e7eb">Total</th>
+        <th style="padding:10px;border-bottom:1px solid #e5e7eb"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td style="padding:10px">{{ item.product.name }}</td>
+        <td style="padding:10px">₹{{ item.product.price }}</td>
+        <td style="padding:10px">{{ item.quantity }}</td>
+        <td style="padding:10px">₹{{ item.product.price|floatformat:2 }}</td>
+        <td style="padding:10px">
+          <form method="post" action="{% url 'remove_from_cart' item.id %}">
+            {% csrf_token %}
+            <input type="submit" value="Remove" />
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p style="text-align:right;margin-top:1rem;font-weight:700">Subtotal: ₹{{ subtotal }}</p>
+  <div style="text-align:right">
+    <a href="/orders/checkout/" class="button">Proceed to Checkout</a>
+  </div>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+{% endblock %}
+
+
